@@ -1,72 +1,37 @@
+
+
 const express = require("express");
-const http = require('http');
-const socketIO = require('socket.io');
-const mongoose = require("mongoose");
-const cors = require("cors")
-
-
 const app = express();
-const server = http.createServer(app); // Create an HTTP server using the Express app
-const io = socketIO(server); // Create a WebSocket server using the HTTP server
+const http = require("http");
+const cors = require("cors");
+const { Server } = require("socket.io");
+app.use(cors());
 
-app.use(cors)
-//By creating an HTTP server and using socket.io, you can handle both regular HTTP requests (for API endpoints) and WebSocket connections (for real-time chat functionality) in your server.js file. This allows your backend to serve both the API endpoints and handle real-time messaging concurrently within the same application.
-// key -> VyaSXfFBOX3Mb8Aj
+const server = http.createServer(app);
+
+const io = new Server(server, {
+  cors: {
+    origin: "http://127.0.0.1:5173",
+    methods: ["GET", "POST"],
+  },
+});
 
 const PORT = process.env.PORT || 5000;
 
-const MONGODB_URI = 'mongodb+srv://arsaluddin134:VyaSXfFBOX3Mb8Aj@cluster0.mcc8iiu.mongodb.net/'; // Replace with your MongoDB connection URI
+io.on("connection", (socket) => {
+  console.log(`User Connected: ${socket.id}`);
 
-mongoose.connect(MONGODB_URI, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-const MessageSchema = new mongoose.Schema({
-  text: String,
-  user: String,
-});
-
-const Message = new mongoose.model('Message',MessageSchema);
-
-// Socket.io connection handling
-io.on('connection', async(socket) => {
-  console.log('User connected:', socket.id);
-
-
-   // Fetch initial chat data from the database
-   try {
-    const messages = await Message.find().sort({ _id: -1 }).limit(10);
-    socket.emit('initial_data', messages);
-  } catch (error) {
-    console.error('Error fetching initial data:', error);
-    socket.emit('initial_data', []); // Send an empty array if an error occurs
-  }
-
-
-  // Event when a new message is sent
-  socket.on('send_message', (data) => {
-    console.log('Message received:', data);
-
-    // Save the message to the MongoDB database
-    const message = new Message({
-      text: data.text,
-      user: data.user,
-    });
-
-    message.save((err) => {
-      if (err) {
-        console.error('Error saving message:', err);
-      } else {
-        // Broadcast the new message to all connected clients
-        io.emit('receive_message', data);
-      }
-    });
+  socket.on("join_room", (data) => {
+    socket.join(data);
+    console.log(`User with ID: ${socket.id} joined room: ${data}`);
   });
 
-  // Event when a user disconnects
-  socket.on('disconnect', () => {
-    console.log('User disconnected:', socket.id);
+  socket.on("send_message", (data) => {
+    socket.to(data.room).emit("receive_message", data);
+  });
+
+  socket.on("disconnect", () => {
+    console.log("User Disconnected", socket.id);
   });
 });
 
