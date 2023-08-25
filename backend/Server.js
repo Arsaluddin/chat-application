@@ -1,14 +1,23 @@
-import express from "express";
-
-import dotenv from "dotenv";
+// backend/server.js
+const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const app = express();
+const apiRoutes = require('./routes/message');
+const dotenv = require('dotenv')
 dotenv.config();
+ require('./db/connect');
+const PORT = process.env.PORT || 5000;
 
-import helmet from "helmet";
-import xss from "xss-clean";
-import mongoSanitize from "express-mongo-sanitize";
+app.use(cors());
+app.use(bodyParser.json());
 
-import morgan from "morgan";
 
-import "express-async-errors";
+app.use('/message', apiRoutes);
 
-import { createServer } from "http";
+
+
+// Start the server
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
