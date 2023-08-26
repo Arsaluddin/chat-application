@@ -6,7 +6,7 @@ const app = express();
 const apiRoutes = require('./routes/message');
 const dotenv = require('dotenv')
 dotenv.config();
- require('./db/connect');
+require('./db/connect');
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
