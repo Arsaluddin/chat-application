@@ -1,20 +1,21 @@
 // src/components/Sidebar.js
 import React from 'react';
 
-const Sidebar = () => {
-  // Mock data for demonstration
-  const contacts = [
-    { id: 1, name: 'Alice' },
-    { id: 2, name: 'Bob' },
-    // Add more contacts...
-  ];
-
+const Sidebar = ({ contacts, selectedContact, onSelectContact }) => {
   return (
-    <div className="bg-gray-200 p-4 min-h-screen w-1/4">
-      <h2 className="text-xl font-semibold mb-4">Contacts</h2>
-      <ul>
+    <div className="bg-white p-4 min-h-screen w-1/4 shadow-md">
+      <h2 className="text-2xl font-semibold mb-4">Contacts</h2>
+      <ul className="space-y-2">
         {contacts.map((contact) => (
-          <li key={contact.id} className="py-2">
+          <li
+            key={contact.id}
+            className={`py-2 px-4 rounded-md cursor-pointer ${
+              selectedContact?.id === contact.id
+                ? 'bg-blue-100 text-blue-700'
+                : 'hover:bg-gray-100'
+            }`}
+            onClick={() => onSelectContact(contact)}
+          >
             {contact.name}
           </li>
         ))}
