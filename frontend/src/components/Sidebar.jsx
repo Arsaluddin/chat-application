@@ -8,16 +8,17 @@ const Sidebar = ({ contacts, selectedContact, onSelectContact }) => {
       <ul className="space-y-2">
         {contacts.map((contact) => (
           <li
-            key={contact.id}
-            className={`py-2 px-4 rounded-md cursor-pointer ${
-              selectedContact?.id === contact.id
-                ? 'bg-blue-100 text-blue-700'
-                : 'hover:bg-gray-100'
-            }`}
-            onClick={() => onSelectContact(contact)}
-          >
-            {contact.name}
-          </li>
+          key={contact.id}
+          className={`py-2 px-4 rounded-md cursor-pointer ${
+            selectedContact?.id === contact.id
+              ? 'bg-blue-100 text-blue-700'
+              : 'hover:bg-gray-100'
+          }`}
+          onClick={() => onSelectContact(contact)}
+        >
+          {contact.name}
+        </li>
+        
         ))}
       </ul>
     </div>

@@ -20,12 +20,13 @@ const Chat = () => {
       sender: 'You',
       content: message,
     };
-
+  
     setMessages((prevMessages) => ({
       ...prevMessages,
       [selectedContact.id]: [...(prevMessages[selectedContact.id] || []), newMessage],
     }));
   };
+  
 
   return (
     <div className="flex min-h-screen bg-gray-100">
