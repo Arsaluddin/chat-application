@@ -1,13 +1,29 @@
 // src/pages/LoginPage.js
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
+
+  const navigate = useNavigate();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle login logic here
+
+     try{
+        const data = {email, password};
+        const res = await axios.post('http://localhost:5000/auth/login',data);
+        console.log(res.data);
+        navigate('/chat');
+     }
+     catch(error){
+        console.log(error);
+     }
+
   };
 
   return (

@@ -1,14 +1,28 @@
 // src/pages/RegisterPage.js
 import React, { useState } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const RegisterPage = () => {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     // Handle registration logic here
+     try{
+         const data = {username, email, password};
+         const res = await axios.post('http://localhost:5000/auth/register',data);
+         console.log(res.data)
+
+         navigate('/chat');
+     }
+     catch (error) {
+        console.log(error)
+     }
   };
 
   return (
