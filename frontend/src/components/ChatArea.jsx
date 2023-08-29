@@ -1,4 +1,3 @@
-// src/components/ChatArea.js
 import React from 'react';
 
 const ChatArea = ({ messages }) => {

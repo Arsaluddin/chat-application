@@ -6,7 +6,9 @@ const MessageInput = ({ onSendMessage }) => {
 
   const handleSendMessage = () => {
     if (message.trim() !== '') {
-      onSendMessage(message);
+      const timestamp = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      const messageWithTimestamp = `${message} (${timestamp})`;
+      onSendMessage(messageWithTimestamp);
       setMessage('');
     }
   };
