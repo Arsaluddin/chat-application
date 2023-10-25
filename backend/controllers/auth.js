@@ -35,6 +35,15 @@ const register = async (req, res) => {
       res.status(500).json({ message: 'An error occurred' });
     }
   };
+
+  getRegisteredUsernames = async (req, res) => {
+    try {
+      const usernames = await User.find().select('username');
+      res.json(usernames);
+    } catch (error) {
+      res.status(500).json({ message: 'An error occurred' });
+    }
+  };
   
 
-module.exports = { register, login };
+module.exports = { register, login,getRegisteredUsernames};
